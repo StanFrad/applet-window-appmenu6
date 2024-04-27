@@ -5,15 +5,22 @@ set(appmenuapplet_SRCS
 
 add_library(plasma_applet_windowappmenu MODULE ${appmenuapplet_SRCS})
 
-kcoreaddons_desktop_to_json(plasma_applet_windowappmenu ../package/metadata.desktop)
+#kcoreaddons_desktop_to_json(plasma_applet_windowappmenu ../package/metadata.desktop)
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/metadata.json
+    COMMAND desktoptojson -i ${CMAKE_SOURCE_DIR}/package/metadata.desktop
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+set_property(TARGET plasma_applet_windowappmenu APPEND PROPERTY AUTOGEN_TARGET_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/metadata.json)
 
 target_link_libraries(plasma_applet_windowappmenu
-                      Qt5::Widgets
-                      Qt5::Quick
-                      Qt5::DBus
-                      KF5::ConfigWidgets
-                      KF5::Plasma
-                      KF5::WindowSystem
+                      Qt6::Widgets
+                      Qt6::Quick
+                      Qt6::DBus
+                      KF6::ConfigWidgets
+                      Plasma::Plasma
+                      KF6::WindowSystem
                       KDecoration2::KDecoration
                       KDecoration2::KDecoration2Private)
 
