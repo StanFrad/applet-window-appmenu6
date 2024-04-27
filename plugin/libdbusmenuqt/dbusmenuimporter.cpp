@@ -23,6 +23,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QWidgetAction>
+#include <QActionGroup>
 
 // Local
 #include "dbusmenushortcut_p.h"
