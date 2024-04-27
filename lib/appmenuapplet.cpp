@@ -47,8 +47,8 @@ QString viewService()
 }
 }
 
-AppMenuApplet::AppMenuApplet(QObject *parent, const QVariantList &data)
-    : Plasma::Applet(parent, data)
+AppMenuApplet::AppMenuApplet(QObject *parent, const KPluginMetaData &data, const QVariantList &args)
+    : Plasma::Applet(parent, data, args)
 {
 #if LibTaskManager_CURRENTMINOR_VERSION < 19 /*5.19*/
     // Disable for Plasma Desktop < 5.19
@@ -438,6 +438,7 @@ bool AppMenuApplet::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
-K_EXPORT_PLASMA_APPLET_WITH_JSON(appmenu, AppMenuApplet, "metadata.json")
+//K_EXPORT_PLASMA_APPLET_WITH_JSON(appmenu, AppMenuApplet, "metadata.json");
+K_PLUGIN_CLASS(AppMenuApplet)
 
 #include "appmenuapplet.moc"

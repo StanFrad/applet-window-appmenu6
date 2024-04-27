@@ -30,6 +30,16 @@ class QMenu;
 class AppMenuModel;
 class DecorationPalette;
 
+#ifndef OPAQUE_PTR_QQuickItem
+#define OPAQUE_PTR_QQuickItem
+Q_DECLARE_OPAQUE_POINTER(QQuickItem*)
+#endif
+
+#ifndef OPAQUE_PTR_QObject
+#define OPAQUE_PTR_QObject
+Q_DECLARE_OPAQUE_POINTER(QObject*)
+#endif
+
 class AppMenuApplet : public Plasma::Applet
 {
     Q_OBJECT
@@ -53,7 +63,7 @@ public:
         CompactView
     };
 
-    explicit AppMenuApplet(QObject *parent, const QVariantList &data);
+    explicit AppMenuApplet(QObject *parent, const KPluginMetaData &data, const QVariantList &args);
     ~AppMenuApplet() override;
 
     void init() override;
