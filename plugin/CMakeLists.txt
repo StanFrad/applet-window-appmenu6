@@ -21,7 +21,7 @@ target_link_libraries(appmenuplugin
                       Qt6::Widgets
                       Qt6::Quick
                       Plasma::Plasma
-                      #KF5::WaylandClient
+                      Plasma::KWaylandClient
                       KF6::WindowSystem
                       PW::LibTaskManager
                       dbusmenuqt)

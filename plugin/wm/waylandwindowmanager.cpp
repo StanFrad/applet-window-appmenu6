@@ -104,7 +104,7 @@ void WaylandWindowManager::setupWaylandIntegration()
 KWayland::Client::PlasmaWindow *WaylandWindowManager::windowFor(QVariant wid)
 {
     auto it = std::find_if(m_windowManagement->windows().constBegin(), m_windowManagement->windows().constEnd(), [&wid](KWayland::Client::PlasmaWindow * w) noexcept {
-            return w->isValid() && w->internalId() == wid.toUInt();
+            return w->isValid() && w->uuid().toUInt() == wid.toUInt();
     });
 
     if (it == m_windowManagement->windows().constEnd()) {

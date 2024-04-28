@@ -26,6 +26,7 @@
 #include <QAbstractNativeEventFilter>
 #include <QObject>
 #include <KWindowSystem>
+#include <KWindowInfo>
 
 namespace WM {
 
@@ -38,7 +39,7 @@ public:
     ~X11FallbackWindowManager() override;
 
 protected:
-    bool nativeEventFilter(const QByteArray &eventType, void *message, long int *result) override;
+    bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result) override;
 
 private Q_SLOTS:
     void onActiveWindowChanged(WId id);
