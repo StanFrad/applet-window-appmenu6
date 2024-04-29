@@ -49,7 +49,7 @@ Item {
         return buttonMouseArea.containsMouse;
     }
 
-    readonly property bool menuOpened: plasmoid.nativeInterface.currentIndex === buttonIndex
+    readonly property bool menuOpened: plasmoid.currentIndex === buttonIndex
     readonly property int shadow: 3
 
     readonly property int implicitWidth: {
@@ -57,7 +57,7 @@ Item {
             if (buttonItem.text !== "") {
                 return itemLoader.item.implicitWidth + plasmoid.configuration.spacing * 2 + 2*shadow;
             } else {
-                return itemLoader.item.implicitWidth + units.smallspacing * 2 + 2*shadow;
+                return itemLoader.item.implicitWidth + Kirigami.Units.smallspacing * 2 + 2*shadow;
             }
         }
 
@@ -67,9 +67,9 @@ Item {
     readonly property int implicitHeight: {
         if (itemLoader.item) {
             if (buttonItem.text !== "") {
-                return itemLoader.item.implicitHeight + units.smallspacing * 2 + 2*shadow;
+                return itemLoader.item.implicitHeight + Kirigami.Units.smallspacing * 2 + 2*shadow;
             } else {
-                return itemLoader.item.implicitHeight + units.smallspacing * 2 + 2*shadow;
+                return itemLoader.item.implicitHeight + Kirigami.Units.smallspacing * 2 + 2*shadow;
             }
         }
 
@@ -112,9 +112,9 @@ Item {
             // fake highlighted
             color: {
                 if (menuOpened) {
-                    return enforceLattePalette ? root.latteBridge.palette.highlightColor : theme.highlightColor
+                    return enforceLattePalette ? root.latteBridge.palette.highlightColor : Kirigami.Theme.highlightColor
                 } else if (buttonItem.containsMouse) {
-                    return enforceLattePalette ? root.latteBridge.palette.buttonBackgroundColor : theme.buttonBackgroundColor
+                    return enforceLattePalette ? root.latteBridge.palette.buttonBackgroundColor : Kirigami.Theme.backgroundColor
                 } else {
                     return 'transparent';
                 }
@@ -269,11 +269,11 @@ Item {
 
             color: {
                 if (buttonItem.menuOpened) {
-                    return enforceLattePalette ? root.latteBridge.palette.highlightedTextColor : theme.highlightedTextColor
+                    return enforceLattePalette ? root.latteBridge.palette.highlightedTextColor : Kirigami.Theme.highlightedTextColor
                 } else if (buttonItem.containsMouse) {
-                    return enforceLattePalette ? root.latteBridge.palette.buttonTextColor : theme.buttonTextColor
+                    return enforceLattePalette ? root.latteBridge.palette.buttonTextColor : Kirigami.Theme.buttonTextColor
                 } else {
-                    return enforceLattePalette ? root.latteBridge.palette.textColor : theme.textColor;
+                    return enforceLattePalette ? root.latteBridge.palette.textColor : Kirigami.Theme.textColor;
                 }
             }
         }
@@ -292,11 +292,11 @@ Item {
             layer.effect: ColorOverlay{
                 color: {
                     if (buttonItem.menuOpened) {
-                        return enforceLattePalette ? root.latteBridge.palette.highlightedTextColor : theme.highlightedTextColor
+                        return enforceLattePalette ? root.latteBridge.palette.highlightedTextColor : Kirigami.Theme.highlightedTextColor
                     } else if (buttonItem.containsMouse) {
-                        return enforceLattePalette ? root.latteBridge.palette.buttonTextColor : theme.buttonTextColor
+                        return enforceLattePalette ? root.latteBridge.palette.buttonTextColor : Kirigami.Theme.textColor
                     } else {
-                        return enforceLattePalette ? root.latteBridge.palette.textColor : theme.textColor;
+                        return enforceLattePalette ? root.latteBridge.palette.textColor : Kirigami.Theme.textColor;
                     }
                 }
             }

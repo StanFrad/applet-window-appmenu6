@@ -22,6 +22,7 @@ import QtQuick.Controls
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.components as PlasmaComponents
+import org.kde.kirigami as Kirigami
 
 Item {
     id: layout
@@ -37,14 +38,14 @@ Item {
         height: parent.height
         anchors.right: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        color: enforceLattePalette ? root.latteBridge.palette.backgroundColor : theme.backgroundColor
+        color: enforceLattePalette ? root.latteBridge.palette.backgroundColor : Kirigami.Theme.backgroundColor
         opacity: leftIndicatorOpacity
 
         layer.enabled: opacity > 0
         layer.effect: DropShadow{
             radius: layout.shadow
             samples: 2 * radius
-            color: enforceLattePalette ? root.latteBridge.palette.textColor : theme.textColor
+            color: enforceLattePalette ? root.latteBridge.palette.textColor : Kirigami.Theme.textColor
         }
     }
 
@@ -53,14 +54,14 @@ Item {
         height: parent.height
         anchors.left: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        color: enforceLattePalette ? root.latteBridge.palette.backgroundColor : theme.backgroundColor
+        color: enforceLattePalette ? root.latteBridge.palette.backgroundColor : Kirigami.Theme.backgroundColor
         opacity: rightIndicatorOpacity
 
         layer.enabled: opacity > 0
         layer.effect: DropShadow{
             radius: layout.shadow
             samples: 2 * radius
-            color: enforceLattePalette ? root.latteBridge.palette.textColor : theme.textColor
+            color: enforceLattePalette ? root.latteBridge.palette.textColor : Kirigami.Theme.textColor
         }
     }
 }

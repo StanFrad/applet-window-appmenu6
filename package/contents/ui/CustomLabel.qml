@@ -22,6 +22,7 @@ import QtQuick.Controls
 
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
 
 Item {
     id: lbl
@@ -40,7 +41,7 @@ Item {
         width: plasmoid.formFactor === PlasmaCore.Types.Horizontal ? length : thickness
         height: plasmoid.formFactor === PlasmaCore.Types.Horizontal ? thickness : length
 
-        color: enforceLattePalette ? root.latteBridge.palette.textColor : theme.textColor;
+        color: enforceLattePalette ? root.latteBridge.palette.textColor : Kirigami.Theme.textColor;
         font.bold: true
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

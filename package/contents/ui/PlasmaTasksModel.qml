@@ -20,7 +20,7 @@
 import QtQuick
 import QtQml.Models
 
-import org.kde.plasma.plasmoid
+import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core as PlasmaCore
 import org.kde.taskmanager as TaskManager
 
@@ -47,7 +47,7 @@ Item {
         id: tasksModel
         sortMode: TaskManager.TasksModel.SortVirtualDesktop
         groupMode: TaskManager.TasksModel.GroupDisabled
-        screenGeometry: plasmoid.screenGeometry
+        screenGeometry: root.screenGeometry
         activity: activityInfo.currentActivity
         virtualDesktop: virtualDesktopInfo.currentDesktop
 
