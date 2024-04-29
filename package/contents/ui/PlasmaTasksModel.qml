@@ -17,12 +17,12 @@
 *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import QtQuick 2.7
-import QtQml.Models 2.2
+import QtQuick
+import QtQml.Models
 
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.taskmanager 0.1 as TaskManager
+import org.kde.plasma.plasmoid
+import org.kde.plasma.core as PlasmaCore
+import org.kde.taskmanager as TaskManager
 
 Item {
     id: plasmaTasksItem

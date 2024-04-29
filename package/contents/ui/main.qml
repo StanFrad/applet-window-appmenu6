@@ -16,20 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
-import QtGraphicalEffects 1.0
-import QtQuick.Layouts 1.1
-import QtQuick.Controls 1.4
+import QtQuick
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
+import QtQuick.Controls
 
-import org.kde.plasma.plasmoid 2.0
-import org.kde.kquickcontrolsaddons 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.taskmanager 0.1 as TaskManager
+import org.kde.plasma.plasmoid
+import org.kde.kquickcontrolsaddons
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.plasma5support as Plasma5Support
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.taskmanager as TaskManager
 
-import org.kde.private.windowAppMenu 0.1 as AppMenuPrivate
+import org.kde.private.windowAppMenu as AppMenuPrivate
 
-Item {
+PlasmoidItem {
     id: root
 
     readonly property int containmentType: plasmoid.configuration.containmentType
@@ -47,7 +48,7 @@ Item {
 
     readonly property string currentScheme: plasmoid.configuration.selectedScheme
 
-    Plasmoid.preferredRepresentation: plasmoid.fullRepresentation
+    preferredRepresentation: fullRepresentation
     Plasmoid.status: inFullView ? fullLayout.status : compactLayout.status
 
     //BEGIN Layout properties
@@ -169,18 +170,18 @@ Item {
     // END Window properties
 
     onViewChanged: {
-        plasmoid.nativeInterface.view = view;
+        plasmoid.view = view;
     }
 
     Component.onCompleted: {
         plasmoid.configuration.supportsActiveWindowSchemes = false;
         plasmoid.configuration.windowTitleIsPresent = false;
-        plasmoid.nativeInterface.buttonGrid = buttonGrid;
+        plasmoid.buttonGrid = buttonGrid;
 
         containmentIdentifierTimer.start();
 
         // using a Connections {} doesn't work for some reason in Qt >= 5.8
-        plasmoid.nativeInterface.requestActivateIndex.connect(function (index) {
+        plasmoid.requestActivateIndex.connect(function (index) {
             if(inFullView) {
                 var idx = Math.max(0, Math.min(buttonRepeater.count - 1, index))
                 var button = buttonRepeater.itemAt(index)
@@ -209,9 +210,8 @@ Item {
     }
 
     Binding {
-        target: plasmoid.nativeInterface
-        property: "menuColorScheme"
-        when: plasmoid.nativeInterface && appMenuModel
+        property: "plasmoid.menuColorScheme"
+        when: plasmoid && appMenuModel
 
         value: {
             if (root.currentScheme === "_default_") {
@@ -245,12 +245,12 @@ Item {
 
         onClicked: {
             if (visible) {
-                plasmoid.nativeInterface.trigger(this, buttonIndex);
+                plasmoid.trigger(this, buttonIndex);
             }
         }
 
         readonly property int status: {
-            if (menuAvailable && plasmoid.nativeInterface.currentIndex === 0) {
+            if (menuAvailable && plasmoid.currentIndex === 0) {
                 return PlasmaCore.Types.NeedsAttentionStatus;
             } else if (menuAvailable && appMenuModel.visible){
                 return PlasmaCore.Types.ActiveStatus
@@ -271,7 +271,7 @@ Item {
             }
 
             if (menuAvailable){
-                if (plasmoid.nativeInterface.currentIndex > -1 && buttonRepeater.count > 0) {
+                if (plasmoid.currentIndex > -1 && buttonRepeater.count > 0) {
                     return PlasmaCore.Types.NeedsAttentionStatus;
                 } else if (buttonRepeater.count > 0) {
                     return PlasmaCore.Types.ActiveStatus
@@ -286,7 +286,7 @@ Item {
         }
 
         // So we can show mnemonic underlines only while Alt is pressed
-        PlasmaCore.DataSource {
+        Plasma5Support.DataSource {
             id: keystateSource
             engine: "keystate"
             connectedSources: ["Alt"]
@@ -330,13 +330,13 @@ Item {
                 property int currentIndex: -1
 
                 onCurrentIndexChanged: {
-                    if (currentIndex >= 0 && plasmoid.nativeInterface.menuIsShown) {
+                    if (currentIndex >= 0 && plasmoid.menuIsShown) {
                         //! as it appears this codepath when triggered from buttons entering under x11
                         //! does not work because the shown menu gets the grabber. So under
                         //! x11 the applet event filter is responsible for buttons hovering
                         //! to trigger menus showing but for wayland the qml painted buttons
                         //! take up the task
-                        plasmoid.nativeInterface.requestActivateIndex(currentIndex);
+                        plasmoid.requestActivateIndex(currentIndex);
                     }
                 }
 
@@ -396,7 +396,7 @@ Item {
                         text: activeMenu                        
 
                         onClicked: {
-                            plasmoid.nativeInterface.trigger(this, index);
+                            plasmoid.trigger(this, index);
                         }
 
                         onScrolledUp: {
@@ -465,9 +465,9 @@ Item {
         filterByActive: plasmoid.configuration.filterByActive
         filterChildren: plasmoid.configuration.filterChildrenWindows
         screenGeometry: plasmoid.configuration.filterByScreen && !latteBridge ? plasmoid.screenGeometry : Qt.rect(-1, -1, 0, 0) //null geometry
-        onRequestActivateIndex: plasmoid.nativeInterface.requestActivateIndex(index)
+        onRequestActivateIndex: plasmoid.requestActivateIndex(index)
         Component.onCompleted: {
-            plasmoid.nativeInterface.model = appMenuModel
+            plasmoid.model = appMenuModel
         }
 
         winId: latteBridge && existsWindowShown && lastActiveTaskItem ? lastActiveTaskItem.winId : -1

@@ -37,3 +37,4 @@ build/
 .kdev4/
 
 build-kdev/
+compile_commands.json
