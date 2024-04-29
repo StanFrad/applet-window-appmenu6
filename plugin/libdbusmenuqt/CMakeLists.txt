@@ -19,6 +19,7 @@ qt6_add_dbus_interface(libdbusmenu_SRCS com.canonical.dbusmenu.xml dbusmenu_inte
 
 
 add_library(dbusmenuqt STATIC ${libdbusmenu_SRCS})
+set_property(TARGET dbusmenuqt PROPERTY POSITION_INDEPENDENT_CODE True)
 target_link_libraries(dbusmenuqt
     Qt6::DBus
     Qt6::Widgets

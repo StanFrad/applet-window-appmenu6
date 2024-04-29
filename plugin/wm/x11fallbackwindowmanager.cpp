@@ -22,7 +22,7 @@
 #include <config-appmenu.h>
 
 #if HAVE_X11
-#include <QX11Info>
+#include <kx11extras.h>
 #include <xcb/xcb.h>
 #endif
 
@@ -48,28 +48,30 @@ X11FallbackWindowManager::X11FallbackWindowManager(QObject *parent)
         onActiveWindowChanged(m_userWindowId.toUInt());
     });
 
-    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged,
+    connect(KX11Extras::self(), &KX11Extras::activeWindowChanged,
             this, &X11FallbackWindowManager::onActiveWindowChanged);
 
-    connect(KWindowSystem::self()
-            , static_cast<void (KWindowSystem::*)(WId)>(&KWindowSystem::windowChanged)
+    connect(KX11Extras::self()
+            , static_cast<void (KX11Extras::*)(WId, NET::Properties, NET::Properties2)>(&KX11Extras::windowChanged)
             , this
             , &X11FallbackWindowManager::onWindowChanged);
 
-    connect(KWindowSystem::self()
-            , static_cast<void (KWindowSystem::*)(WId)>(&KWindowSystem::windowRemoved)
+    connect(KX11Extras::self()
+            , static_cast<void (KX11Extras::*)(WId)>(&KX11Extras::windowRemoved)
             , this
             , &X11FallbackWindowManager::onWindowRemoved);
 
+    // Needing a NET::Properties for the updated onWindowChanged function.
+    // Function was updated to work with KX11Extras onWindowChanged signal.
     connect(this, &AbstractWindowManager::screenGeometryChanged, this, [this] {
-        onWindowChanged(m_currentWindowId.toUInt());
+        onWindowChanged(m_currentWindowId.toUInt(), NET::WMState | NET::WMGeometry);
     });
 
     connect(this, &AbstractWindowManager::menuAvailableChanged, this, [this] {
-        onWindowChanged(m_currentWindowId.toUInt());
+        onWindowChanged(m_currentWindowId.toUInt(), NET::WMState | NET::WMGeometry);
     });
 
-    onActiveWindowChanged(KWindowSystem::activeWindow());
+    onActiveWindowChanged(KX11Extras::activeWindow());
 
 }
 
@@ -77,10 +79,10 @@ X11FallbackWindowManager::~X11FallbackWindowManager()
 {
 }
 
-void X11FallbackWindowManager::onWindowChanged(WId id)
+void X11FallbackWindowManager::onWindowChanged(WId id, NET::Properties properties, NET::Properties2 properties2)
 {
     if (m_currentWindowId == id) {
-        KWindowInfo info(id, NET::WMState | NET::WMGeometry);
+        KWindowInfo info(id, properties, properties2);
         filterWindow(info);
     }
 }
@@ -106,7 +108,7 @@ void X11FallbackWindowManager::filterWindow(KWindowInfo &info)
         }
         const bool contained = m_screenGeometry.isNull() || m_screenGeometry.contains(windowCenter);
 
-        const bool isActive = m_filterByActive ? info.win() == KWindowSystem::activeWindow() : true;
+        const bool isActive = m_filterByActive ? info.win() == KX11Extras::activeWindow() : true;
 
         setVisible(isActive && !info.isMinimized() && contained);
     }
@@ -130,7 +132,9 @@ void X11FallbackWindowManager::onActiveWindowChanged(WId id)
 #if HAVE_X11
 
     if (KWindowSystem::isPlatformX11()) {
-        auto *c = QX11Info::connection();
+        QNativeInterface::QX11Application *x11App = qApp->nativeInterface<QNativeInterface::QX11Application>();
+
+        auto *c = x11App->connection();
 
         auto getWindowPropertyString = [c, this](WId id, const QByteArray & name) -> QByteArray {
             QByteArray value;
@@ -248,7 +252,7 @@ void X11FallbackWindowManager::onActiveWindowChanged(WId id)
 
 }
 
-bool X11FallbackWindowManager::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+bool X11FallbackWindowManager::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
 {
     Q_UNUSED(result);
 
@@ -271,7 +275,7 @@ bool X11FallbackWindowManager::nativeEventFilter(const QByteArray &eventType, vo
             if (serviceNameAtom != XCB_ATOM_NONE && objectPathAtom != XCB_ATOM_NONE) { // shouldn't happen
                 if (event->atom == serviceNameAtom || event->atom == objectPathAtom) {
                     // see if we now have a menu
-                    onActiveWindowChanged(KWindowSystem::activeWindow());
+                    onActiveWindowChanged(KX11Extras::activeWindow());
                 }
             }
         }

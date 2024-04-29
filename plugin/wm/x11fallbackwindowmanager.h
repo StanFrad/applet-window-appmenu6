@@ -43,7 +43,7 @@ protected:
 
 private Q_SLOTS:
     void onActiveWindowChanged(WId id);
-    void onWindowChanged(WId id);
+    void onWindowChanged(WId id, NET::Properties properties, NET::Properties2 properties2 = NET::Properties2());
     //! there are apps that are not releasing their menu properly after closing
     //! and as such their menu is still shown even though the app does not exist
     //! any more. Such apps are Java based e.g. smartgit
