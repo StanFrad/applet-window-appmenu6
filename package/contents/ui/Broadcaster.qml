@@ -127,7 +127,7 @@ Item{
 
     Connections {
         target: buttonGrid
-        onContainsMouseChanged: {
+        function onContainsMouseChanged() {
             if (broadcaster.cooperationEstablished) {
                 if (buttonGrid.containsMouse) {
                     broadcasterMouseOutDelayer.stop();
@@ -140,7 +140,7 @@ Item{
 
     Connections {
         target: keystateSource
-        onModifierIsPressedChanged: {
+        function onModifierIsPressedChanged() {
             if (broadcaster.cooperationEstablished) {
                 sendValidVisibility();
             }
@@ -149,7 +149,7 @@ Item{
 
     Connections {
         target: appMenuModel
-        onWinIdChanged: {
+        function onWinIdChanged() {
             if (broadcaster.cooperationEstablished) {
                 sendValidVisibility();
             }
