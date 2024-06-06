@@ -39,8 +39,8 @@ Item {
     //! thought that they containMouse even though they did not
     property bool containsMouse: {
         if (inFullView) {
-            if (plasmoid.nativeInterface.currentIndex > -1) {
-                return plasmoid.nativeInterface.currentIndex === buttonIndex;
+            if (plasmoid.currentIndex > -1) {
+                return plasmoid.currentIndex === buttonIndex;
             }
 
             return (buttonIndex > -1) && (buttonGrid.currentIndex === buttonIndex);
