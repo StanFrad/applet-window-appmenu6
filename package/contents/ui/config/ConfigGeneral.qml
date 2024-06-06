@@ -82,7 +82,7 @@ Item {
 
     ColumnLayout {
         id:mainColumn
-        spacing: PlasmaCore.Units.largeSpacing
+        spacing: Kirigami.Units.gridUnit
         width:parent.width - anchors.leftMargin * 2
         anchors.top: parent.top
         anchors.left: parent.left
