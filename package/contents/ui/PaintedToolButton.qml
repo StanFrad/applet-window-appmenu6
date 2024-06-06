@@ -110,11 +110,20 @@ Item {
             radius: buttonItem.shadow
 
             // fake highlighted
-            color: {
+            /*color: {
                 if (menuOpened) {
                     return enforceLattePalette ? root.latteBridge.palette.highlightColor : Kirigami.Theme.highlightColor
                 } else if (buttonItem.containsMouse) {
                     return enforceLattePalette ? root.latteBridge.palette.buttonBackgroundColor : Kirigami.Theme.backgroundColor
+                } else {
+                    return 'transparent';
+                }
+            }*/
+            color: {
+                if (buttonItem.menuOpened) {
+                    return Kirigami.Theme.highlightColor
+                } else if (buttonItem.containsMouse) {
+                    return Kirigami.Theme.backgroundColor
                 } else {
                     return 'transparent';
                 }
@@ -267,15 +276,15 @@ Item {
                 return Util.stylizeEscapedMnemonics(Util.toHtmlEscaped(text));
             }
 
-            color: {
+            /*color: {
                 if (buttonItem.menuOpened) {
-                    return enforceLattePalette ? root.latteBridge.palette.highlightedTextColor : Kirigami.Theme.highlightedTextColor
+                    return Kirigami.Theme.highlightedTextColor
                 } else if (buttonItem.containsMouse) {
-                    return enforceLattePalette ? root.latteBridge.palette.buttonTextColor : Kirigami.Theme.buttonTextColor
+                    return Kirigami.Theme.buttonTextColor
                 } else {
-                    return enforceLattePalette ? root.latteBridge.palette.textColor : Kirigami.Theme.textColor;
+                    return Kirigami.Theme.textColor;
                 }
-            }
+            }*/
         }
     }
 
@@ -292,11 +301,11 @@ Item {
             layer.effect: ColorOverlay{
                 color: {
                     if (buttonItem.menuOpened) {
-                        return enforceLattePalette ? root.latteBridge.palette.highlightedTextColor : Kirigami.Theme.highlightedTextColor
+                        return Kirigami.Theme.highlightedTextColor
                     } else if (buttonItem.containsMouse) {
-                        return enforceLattePalette ? root.latteBridge.palette.buttonTextColor : Kirigami.Theme.textColor
+                        return Kirigami.Theme.buttonTextColor
                     } else {
-                        return enforceLattePalette ? root.latteBridge.palette.textColor : Kirigami.Theme.textColor;
+                        return Kirigami.Theme.textColor;
                     }
                 }
             }
