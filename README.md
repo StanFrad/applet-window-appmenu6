@@ -1,4 +1,5 @@
 # Window AppMenu Applet
+This is port   [psifidotos](https://github.com/psifidotos/applet-window-appmenu/) and  [proatgram](https://github.com/proatgram/applet-window-appmenu6/) .
 
 This is a Plasma 6 applet that shows the current window appmenu in your panels. This plasmoid was coming from [Latte land](https://phabricator.kde.org/source/latte-dock/repository/master/) but now support only Plasma panels.
 
