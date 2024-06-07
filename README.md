@@ -1,6 +1,6 @@
 # Window AppMenu Applet
 
-This is a Plasma 5 applet that shows the current window appmenu in your panels. This plasmoid was coming from [Latte land](https://phabricator.kde.org/source/latte-dock/repository/master/) but now support only Plasma panels.
+This is a Plasma 6 applet that shows the current window appmenu in your panels. This plasmoid was coming from [Latte land](https://phabricator.kde.org/source/latte-dock/repository/master/) but now support only Plasma panels.
 
 <p align="center">
 <img src="https://i.imgur.com/T0sLWav.gif" width="580"><br/>
