@@ -22,13 +22,15 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Controls
 
 import org.kde.plasma.plasmoid
-import org.kde.kquickcontrolsaddons
+import org.kde.kquickcontrolsaddons  2.0 
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.plasma5support as Plasma5Support
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.taskmanager as TaskManager
 
+
 import org.kde.private.windowAppMenu as AppMenuPrivate
+
 
 PlasmoidItem {
     id: root
@@ -39,7 +41,8 @@ PlasmoidItem {
     readonly property bool view: inCompactView
     readonly property bool inEditMode: plasmoid.userConfiguring || latteInEditMode
     readonly property bool menuAvailable: appMenuModel.menuAvailable
-    readonly property bool kcmAuthorized: KCMShell.authorize(["style.desktop"]).length > 0
+    //! FixReferenceError: KCMShell is not definedI don't know what this line does, but there's an error here
+    //readonly property bool kcmAuthorized: KCMShell.authorize(["style.desktop"]).length > 0
 
     readonly property bool inFullView: !plasmoid.configuration.compactView && plasmoid.formFactor === PlasmaCore.Types.Horizontal
     readonly property bool inCompactView: !inFullView
@@ -176,9 +179,11 @@ PlasmoidItem {
     Component.onCompleted: {
         plasmoid.configuration.supportsActiveWindowSchemes = false;
         plasmoid.configuration.windowTitleIsPresent = false;
-        plasmoid.buttonGrid = buttonGrid;
+        //plasmoid.buttonGrid = buttonGrid;
+        //! fix Error: Cannot assign QObject* to QQuickItem*
+        plasmoid.setButtonGrid = buttonGrid;
 
-        containmentIdentifierTimer.start();
+        //containmentIdentifierTimer.start();
 
         // using a Connections {} doesn't work for some reason in Qt >= 5.8
         plasmoid.requestActivateIndex.connect(function (index) {
@@ -433,24 +438,26 @@ PlasmoidItem {
                     height: parent.height
 
                     TaskManager.TasksModel {
-                        id: tasksModel
+                        //fix  Unable to assign [undefined] to QRect
+                        id: plasmoidTasksModel
                         filterByScreen: plasmoid.configuration.filterByScreen
-                        screenGeometry: plasmoid.screenGeometry        
+                        //! fix Unable to assign [undefined] to QRect HACK:
+                        //screenGeometry: plasmoid.screenGeometry        
                     }
 
                     onDoubleClicked: {
                         if(plasmoid.configuration.toggleMaximizedOnDoubleClick){
-                            tasksModel.requestToggleMaximized(tasksModel.activeTask)
+                            plasmoidTasksModel.requestToggleMaximized(plasmoidTasksModel.activeTask)
                         }         
                     }
 
                     onWheel: {
                         if(plasmoid.configuration.toggleMaximizedOnMouseWheel){
-                            var isMaximized = tasksModel.data(tasksModel.activeTask, TaskManager.AbstractTasksModel.IsMaximized)
+                            var isMaximized = plasmoidTasksModel.data(plasmoidTasksModel.activeTask, TaskManager.AbstractTasksModel.IsMaximized)
                             if (wheel.angleDelta.y > 0 && !isMaximized) {
-                                tasksModel.requestToggleMaximized(tasksModel.activeTask)           
+                                plasmoidTasksModel.requestToggleMaximized(plasmoidTasksModel.activeTask)           
                             } else if(wheel.angleDelta.y < 0 && isMaximized){
-                                tasksModel.requestToggleMaximized(tasksModel.activeTask)
+                                plasmoidTasksModel.requestToggleMaximized(plasmoidTasksModel.activeTask)
                             }
                         }       
                     }
@@ -464,12 +471,15 @@ PlasmoidItem {
 
         filterByActive: plasmoid.configuration.filterByActive
         filterChildren: plasmoid.configuration.filterChildrenWindows
-        screenGeometry: plasmoid.configuration.filterByScreen && !latteBridge ? plasmoid.screenGeometry : Qt.rect(-1, -1, 0, 0) //null geometry
+        //! Remove Latte
+        //screenGeometry: plasmoid.configuration.filterByScreen && !latteBridge ? plasmoid.screenGeometry : Qt.rect(-1, -1, 0, 0) //null geometry
+        screenGeometry: plasmoid.configuration.filterByScreen ? plasmoid.screenGeometry : Qt.rect(-1, -1, 0, 0)
         onRequestActivateIndex: plasmoid.requestActivateIndex(index)
         Component.onCompleted: {
             plasmoid.model = appMenuModel
         }
-
+        
+        //! TO-DO Remove Latte
         winId: latteBridge && existsWindowShown && lastActiveTaskItem ? lastActiveTaskItem.winId : -1
 
         readonly property bool ignoreWindow: {
@@ -489,13 +499,14 @@ PlasmoidItem {
         id: containmentIdentifierTimer
         interval: 5000
         onTriggered: {
-            if (latteBridge) {
-                plasmoid.configuration.containmentType = 2; /*Latte containment with new API*/
-                latteBridge.actions.broadcastToApplet("org.kde.windowtitle", "isPresent", true);
-                latteBridge.actions.broadcastToApplet("org.kde.windowtitle", "menuIsPresent", broadcaster.menuIsPresent);
-            } else {
+            //! Remove Latte
+            //if (latteBridge) {
+            //    plasmoid.configuration.containmentType = 2; /*Latte containment with new API*/
+            //    latteBridge.actions.broadcastToApplet("org.kde.windowtitle", "isPresent", true);
+            //    latteBridge.actions.broadcastToApplet("org.kde.windowtitle", "menuIsPresent", broadcaster.menuIsPresent);
+            //} else {
                 plasmoid.configuration.containmentType = 1; /*Plasma containment or Latte with old API*/
-            }
+            //}
         }
     }
 }
