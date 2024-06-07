@@ -30,6 +30,7 @@ import org.kde.kirigami as Kirigami
 import org.kde.private.windowAppMenu as AppMenuPrivate
 
 Item {
+    //TO-DO Fix QML ConfigGeneral: Created graphical object was not placed in the graphics scene.
     id: configGeneral
 
     property alias cfg_compactView: compactViewRadioButton.checked
@@ -121,8 +122,8 @@ Item {
                 ButtonGroup.group: viewOptionGroup
             }
         }
-
-        GridLayout{
+        //! TODO FIX
+        /*GridLayout{
             columns: 2
 
             Label {
@@ -144,7 +145,7 @@ Item {
                     currentIndex = schemesModel.indexOf(plasmoid.configuration.selectedScheme);
                 }
             }
-        }
+        }*/
 
         GridLayout{
             columns: 2
