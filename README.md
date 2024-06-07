@@ -26,7 +26,7 @@ This is a Plasma 5 applet that shows the current window appmenu in your panels. 
 # Requires
 
 - Qt >= 6.7
-- KF6 >= 6.0
+- KF6 >= 6.1
 - Plasma >= 6.0
 - plasma-workspace-devel >= 6.1.0 
 
