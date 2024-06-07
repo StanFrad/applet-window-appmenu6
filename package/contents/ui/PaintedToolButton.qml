@@ -275,7 +275,9 @@ Item {
 
                 return Util.stylizeEscapedMnemonics(Util.toHtmlEscaped(text));
             }
-
+            
+            //! HACK:
+            //! Unable to assign [undefined] to QColor
             /*color: {
                 if (buttonItem.menuOpened) {
                     return Kirigami.Theme.highlightedTextColor
