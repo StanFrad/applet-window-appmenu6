@@ -50,12 +50,13 @@ QString viewService()
 AppMenuApplet::AppMenuApplet(QObject *parent, const KPluginMetaData &data, const QVariantList &args)
     : Plasma::Applet(parent, data, args)
 {
-#if LibTaskManager_CURRENTMINOR_VERSION < 19 /*5.19*/
+
+//#if LibTaskManager_CURRENTMINOR_VERSION < 19 /*5.19*/
     // Disable for Plasma Desktop < 5.19
-    if (KWindowSystem::isPlatformWayland()) {
-        return;
-    }
-#endif
+    //if (KWindowSystem::isPlatformWayland()) {
+    //    return;
+    //}
+//#endif
 
     ++s_refs;
 
@@ -213,8 +214,8 @@ void AppMenuApplet::onMenuAboutToHide()
     //! far from menus, the menus deactivate but for some reason an Enter event is sent and for that
     //! reason a button think that containsMouse. Without that workaround the experience
     //! is a bit broken because there case that buttons appear hovered without really be hovered.
-    QHoverEvent e(QEvent::Leave, QPoint(-5,-5),  QPoint(2, 2));
-    QCoreApplication::instance()->sendEvent(m_currentMenu->windowHandle()->transientParent(), &e);
+    //QHoverEvent e(QEvent::Leave, QPoint(-5,-5),  QPoint(2, 2));
+    //QCoreApplication::instance()->sendEvent(m_currentMenu->windowHandle()->transientParent(), &e);
 }
 
 void AppMenuApplet::repositionMenu()
@@ -392,8 +393,8 @@ bool AppMenuApplet::eventFilter(QObject *watched, QEvent *event)
         }
 
         // Support Fitt's Law and take care the panel margins
-        const QPointF &windowLocalPos = m_buttonGrid->window()->mapFromGlobal(e->globalPos());
-        QPointF buttonGridLocalPos = m_buttonGrid->mapFromScene(windowLocalPos);
+        const QPointF &windowLocalPos = m_buttonGrid->window()->mapFromGlobal(e->globalPosition());
+        const QPointF &buttonGridLocalPos = m_buttonGrid->mapFromScene(windowLocalPos);
 
         // In Latte panel >= v0.10 we can access applets visual geometry
         QVariant appletsVisualGeomVariant = m_buttonGrid->window() ? m_buttonGrid->window()->property("_applets_layout_geometry") : QVariant();
@@ -404,7 +405,7 @@ bool AppMenuApplet::eventFilter(QObject *watched, QEvent *event)
             appletsVisualGeom.moveTopLeft(windowVisualGeom.topLeft());
             windowVisualGeom = appletsVisualGeom;
         }
-
+        /*
         if (inPanel() && windowVisualGeom.contains(e->globalPos()) && !m_buttonGrid->contains(buttonGridLocalPos)) {
             if (formFactor() == Plasma::Types::Horizontal) {
                 buttonGridLocalPos.setY(1);
@@ -412,7 +413,7 @@ bool AppMenuApplet::eventFilter(QObject *watched, QEvent *event)
                 buttonGridLocalPos.setX(1);
             }
         }
-
+        */
         auto *item = m_buttonGrid->childAt(buttonGridLocalPos.x(), buttonGridLocalPos.y());
 
         if (!item) {
